@@ -21,7 +21,11 @@ from django.views.static import serve
 from rest_framework.documentation import include_docs_urls
 from rest_framework.routers import DefaultRouter
 
+from rest_framework.authtoken import views
+from rest_framework_jwt.views import obtain_jwt_token
+
 from goods.views import GoodsListViewSet, CategoryViewSet
+from users.views import SmsCodeViewset, UserViewSet
 
 
 router = DefaultRouter()
@@ -30,6 +34,9 @@ router.register(r'goods', GoodsListViewSet, base_name="goods-list")
 
 # 配置category的url
 router.register(r'categorys', CategoryViewSet, base_name="categorys")
+router.register(r'codes', SmsCodeViewset, base_name="codes")
+
+router.register(r'users', UserViewSet, base_name="users")
 
 
 urlpatterns = [
@@ -40,4 +47,10 @@ urlpatterns = [
     url(r'^', include(router.urls)),
 
     url(r'docs/', include_docs_urls(title="pujin")),
+
+    # drf 自带的token认证模式
+    url(r'^api-token-auth/', views.obtain_auth_token),
+
+    # jwt的认证接口
+    url(r'^login/', obtain_jwt_token),
 ]

@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'django_filters',
     'corsheaders',
+    'rest_framework.authtoken',
 
 ]
 
@@ -138,6 +139,9 @@ USE_L10N = True
 USE_TZ = False  # 默认是True，时间是utc时间，由于我们要用本地时间，所以手动修改为false
 
 
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+)
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -150,11 +154,28 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # django rest framework
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',)
+    'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 
 #     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
 #     'PAGE_SIZE': 10
+
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.BasicAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+    ),
 }
 
 
+import datetime
 
+JWT_AUTH = {
+    'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
+    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+}
+
+# 手机号正则
+REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
+
+# 云片网SMS APIKEY
+YUN_PIAN_API_KEY = "87dc988ce49b65088687dc21ad007465"
