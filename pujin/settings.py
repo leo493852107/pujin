@@ -12,10 +12,11 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 
 import os
 import sys
+import datetime
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, BASE_DIR)
+# sys.path.insert(0, BASE_DIR)
 sys.path.insert(0, os.path.join(BASE_DIR, 'apps'))
 sys.path.insert(0, os.path.join(BASE_DIR, 'extra_apps'))
 
@@ -31,7 +32,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
-AUTH_USER_MODEL = 'users.UserProfile'   # 替换系统中的用户
+AUTHENTICATION_BACKENDS = (
+    'users.views.CustomBackend',
+    'django.contrib.auth.backends.ModelBackend',
+)
+
+AUTH_USER_MODEL = "users.UserProfile"   # 替换系统中的用户
 
 
 # Application definition
@@ -43,14 +49,14 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'rest_framework',
-    'DjangoUeditor',
     'users.apps.UsersConfig',
     'goods.apps.GoodsConfig',
     'trade.apps.TradeConfig',
     'user_operation.apps.UserOperationConfig',
     'xadmin',
     'crispy_forms',
+    'DjangoUeditor',
+    'rest_framework',
     'django_filters',
     'corsheaders',
     'rest_framework.authtoken',
@@ -74,7 +80,7 @@ ROOT_URLCONF = 'pujin.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -139,9 +145,7 @@ USE_L10N = True
 USE_TZ = False  # 默认是True，时间是utc时间，由于我们要用本地时间，所以手动修改为false
 
 
-AUTHENTICATION_BACKENDS = (
-    'users.views.CustomBackend',
-)
+
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
@@ -156,22 +160,16 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 REST_FRAMEWORK = {
     'DEFAULT_FILTER_BACKENDS': ('django_filters.rest_framework.DjangoFilterBackend',),
 
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.LimitOffsetPagination',
-#     'PAGE_SIZE': 10
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-        'rest_framework_jwt.authentication.JSONWebTokenAuthentication',
+
     ),
 }
 
-
-import datetime
-
 JWT_AUTH = {
     'JWT_EXPIRATION_DELTA': datetime.timedelta(days=7),
-    'JWT_AUTH_HEADER_PREFIX': 'JWT',
+    'JWT_AUTH_HEADER_PREFIX': 'Bearer',
 }
 
 # 手机号正则
