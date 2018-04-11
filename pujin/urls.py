@@ -24,10 +24,12 @@ from rest_framework.routers import DefaultRouter
 from rest_framework.authtoken import views
 from rest_framework_jwt.views import obtain_jwt_token
 
+from django.views.generic import TemplateView
+
 from goods.views import GoodsListViewSet, CategoryViewSet
 from users.views import SmsCodeViewset, UserViewSet
 from user_operation.views import UserFavViewset, LeavingMessageViewset, AddressViewset
-from trade.views import ShoppingCartViewset, OrderViewset
+from trade.views import ShoppingCartViewset, OrderViewset, AlipayView
 
 
 router = DefaultRouter()
@@ -63,6 +65,9 @@ urlpatterns = [
 
     url(r'^', include(router.urls)),
 
+    # 首页
+    url(r'^index/', TemplateView.as_view(template_name="index.html"), name="index"),
+
     url(r'docs/', include_docs_urls(title="pujin")),
 
     # drf 自带的token认证模式
@@ -70,4 +75,8 @@ urlpatterns = [
 
     # jwt的认证接口
     url(r'^login/', obtain_jwt_token),
+
+    # 支付宝
+    url(r'^alipay/return/', AlipayView.as_view(), name="alipay"),
+
 ]

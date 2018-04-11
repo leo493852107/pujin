@@ -30,7 +30,7 @@ SECRET_KEY = 'yilf1+lkzzzbqt1yhud)y2k12#5a7oau=_*-j6q)p491wrlr@0'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTHENTICATION_BACKENDS = (
     'users.views.CustomBackend',
@@ -105,7 +105,7 @@ DATABASES = {
         'NAME': 'pujin',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '127.0.0.1',
+        'HOST': '111.231.88.94',
         'OPTIONS': {'init_command': 'SET default_storage_engine=INNODB;'}
     }
 }
@@ -182,3 +182,9 @@ REGEX_MOBILE = "^1[358]\d{9}$|^147\d{8}$|^176\d{8}$"
 
 # 云片网SMS APIKEY
 YUN_PIAN_API_KEY = "87dc988ce49b65088687dc21ad007465"
+
+# 支付宝相关的key路径
+private_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
+ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key_2048.txt')
+
+
