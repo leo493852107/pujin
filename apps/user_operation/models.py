@@ -65,8 +65,8 @@ class UserAddress(models.Model):
     city = models.CharField(max_length=100, default="", verbose_name="城市")
     district = models.CharField(max_length=100, default="", verbose_name="区域")
     address = models.CharField(max_length=100, default="", verbose_name="详细地址")
-    singer_name = models.CharField(max_length=100, default="", verbose_name="签收人")
-    singer_mobile = models.CharField(max_length=11, default="", verbose_name="电话")
+    signer_name = models.CharField(max_length=100, default="", verbose_name="签收人")
+    signer_mobile = models.CharField(max_length=11, default="", verbose_name="电话")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:

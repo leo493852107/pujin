@@ -39,8 +39,8 @@ class Migration(migrations.Migration):
                 ('order_mount', models.FloatField(default=0.0, verbose_name='订单金额')),
                 ('pay_time', models.DateTimeField(blank=True, null=True, verbose_name='支付时间')),
                 ('address', models.CharField(default='', max_length=100, verbose_name='收货地址')),
-                ('singer_name', models.CharField(default='', max_length=20, verbose_name='签收人')),
-                ('singer_mobile', models.CharField(max_length=11, verbose_name='联系电话')),
+                ('signer_name', models.CharField(default='', max_length=20, verbose_name='签收人')),
+                ('signer_mobile', models.CharField(max_length=11, verbose_name='联系电话')),
                 ('add_time', models.DateTimeField(default=datetime.datetime.now, verbose_name='添加时间')),
             ],
             options={

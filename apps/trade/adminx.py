@@ -11,7 +11,7 @@ from .models import ShoppingCart, OrderInfo, OrderGoods
 
 
 class ShoppingCartAdmin(object):
-    list_display = ["user", "goods", "goods_num", ]
+    list_display = ["user", "goods", "nums", ]
 
 
 class OrderInfoAdmin(object):
