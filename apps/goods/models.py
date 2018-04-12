@@ -37,14 +37,14 @@ class GoodsCategoryBrand(models.Model):
     """
     品牌名称
     """
-    category = models.ForeignKey(GoodsCategory, null=True, blank=True, verbose_name="商品类目")
+    category = models.ForeignKey(GoodsCategory, related_name="brands", null=True, blank=True, verbose_name="商品类目")
     name = models.CharField(default="", max_length=30, verbose_name="品牌名", help_text="品牌名")
     desc = models.TextField(default="", max_length=200, verbose_name="品牌描述", help_text="品牌描述")
     image = models.ImageField(max_length=200, upload_to="brand/images/")
     add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
 
     class Meta:
-        verbose_name = "短信验证码"
+        verbose_name = "品牌"
         verbose_name_plural = verbose_name
 
     def __str__(self):
@@ -112,4 +112,41 @@ class Banner(models.Model):
 
     def __str__(self):
         return self.goods.name
+
+
+class IndexAd(models.Model):
+    """
+    首页类别标签右边展示的七个商品广告
+    """
+    category = models.ForeignKey(GoodsCategory, related_name="category", verbose_name="商品类目")
+    goods = models.ForeignKey(Goods, related_name="goods")
+
+    class Meta:
+        verbose_name = "首页广告"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.goods.name
+
+
+
+class HotSearchWords(models.Model):
+    """
+    搜索栏下方热搜词
+    """
+    keywords = models.CharField(default="", max_length=50, verbose_name="热搜词")
+    index = models.IntegerField(default=0, verbose_name="排序")
+    add_time = models.DateTimeField(default=datetime.now, verbose_name="添加时间")
+
+    class Meta:
+        verbose_name = "热搜排行"
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.keywords
+
+
+
+
+
 

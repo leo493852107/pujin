@@ -7,7 +7,7 @@ __time__ = "2017-12-09"
 
 
 import xadmin
-from .models import Goods, GoodsCategory, GoodsImage, GoodsCategoryBrand, Banner
+from .models import Goods, GoodsCategory, GoodsImage, GoodsCategoryBrand, Banner, HotSearchWords, IndexAd
 
 
 class GoodsAdmin(object):
@@ -62,3 +62,5 @@ xadmin.site.register(Banner, BannerGoodsAdmin)
 xadmin.site.register(GoodsCategoryBrand, GoodsBrandAdmin)
 
 
+xadmin.site.register(HotSearchWords, HotSearchAdmin)
+xadmin.site.register(IndexAd, IndexAdAdmin)

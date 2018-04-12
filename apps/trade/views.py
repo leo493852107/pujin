@@ -33,6 +33,32 @@ class ShoppingCartViewset(viewsets.ModelViewSet):
     serializer_class = ShopCartSerializer
     lookup_field = "goods_id"
 
+    # 库存数-购物车数量
+    def perform_create(self, serializer):
+        shop_cart = serializer.save()
+        goods = shop_cart.goods
+        goods.goods_num -= shop_cart.nums
+        goods.save()
+
+    # 库存数+购物车数量
+    def perform_destroy(self, instance):
+        goods = instance.goods
+        goods.goods_num += instance.nums
+        goods.save()
+        # 取goods在del之前取之后就被删掉了
+        instance.delete()
+
+    def perform_update(self, serializer):
+        existed_record = ShoppingCart.objects.get(id=serializer.instance.id)
+        existed_nums = existed_record.nums
+        # 先保存之前的数据existed_nums
+        save_record = serializer.save()
+        # 变化的数量
+        nums = save_record.nums - existed_nums
+        goods = save_record.goods
+        goods.goods_num -= nums
+        goods.save()
+
     def get_serializer_class(self):
         if self.action == 'list':
             return ShopCartDetailSerializer
@@ -147,14 +173,23 @@ class AlipayView(APIView):
         )
 
         verify_result = alipay.verify(processed_dict, sign)
-
+        # 如果验签成功
         if verify_result is True:
             order_sn = processed_dict.get('out_trade_no', None)
             trade_no = processed_dict.get('trade_no', None)
             trade_status = processed_dict.get('trade_status', None)
-
+            # 查询数据库中存在的订单
             existed_orders = OrderInfo.objects.filter(order_sn=order_sn)
             for existed_order in existed_orders:
+                # 订单商品项
+                order_goods = existed_order.goods.all()
+                # 商品销量增加订单中数值
+                for order_good in order_goods:
+                    goods = order_good.goods
+                    goods.sold_num += order_good.goods_num
+                    goods.save()
+
+                # 更新订单状态，填充支付宝给的交易凭证号。
                 existed_order.pay_status = trade_status
                 existed_order.trade_no = trade_no
                 existed_order.pay_time = datetime.now()

@@ -105,7 +105,8 @@ DATABASES = {
         'NAME': 'pujin',
         'USER': 'root',
         'PASSWORD': '',
-        'HOST': '111.231.88.94',
+        # 'HOST': '111.231.88.94',
+        'HOST': '127.0.0.1',
         'OPTIONS': {'init_command': 'SET default_storage_engine=INNODB;'}
     }
 }
@@ -161,15 +162,18 @@ MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 # django rest framework
 REST_FRAMEWORK = {
-    'DEFAULT_FILTER_BACKENDS': (
-        'django_filters.rest_framework.DjangoFilterBackend',
-    ),
-
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework.authentication.BasicAuthentication',
         'rest_framework.authentication.SessionAuthentication',
-
     ),
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.AnonRateThrottle',
+        'rest_framework.throttling.UserRateThrottle'
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'anon': '200/minute',
+        'user': '200/minute'
+    }
 }
 
 JWT_AUTH = {
@@ -188,3 +192,19 @@ private_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/private_2048.txt')
 ali_pub_key_path = os.path.join(BASE_DIR, 'apps/trade/keys/alipay_key_2048.txt')
 
 
+# drf 设置缓存时间
+REST_FRAMEWORK_EXTENSIONS = {
+    'DEFAULT_CACHE_RESPONSE_TIMEOUT': 60 * 15
+}
+
+# http://django-redis-chs.readthedocs.io/zh_CN/latest/
+# 配置 redis 缓存
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
